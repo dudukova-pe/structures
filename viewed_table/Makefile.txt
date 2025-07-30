@@ -1,0 +1,10 @@
+all:
+	gcc -c ./entering/entering.c -o ./entering/entering.o -g	
+	ar r ./entering/libentering.a ./entering/entering.o
+	gcc -c ./table/table.c -o ./table/table.o -L ./entering/ -l:libentering.a -g
+	ar r ./table/libtable.a ./table/table.o ./entering/entering.o
+	gcc -c ./communication/communication.c -o ./communication/communication.o -lreadline -g 
+	ar r ./communication/libcommunication.a ./communication/communication.o ./entering/entering.o
+	gcc main.c -o check -L ./entering/ -l:libentering.a -L ./table/ -l:libtable.a -L ./communication/ -l:libcommunication.a -lreadline -g
+clean:
+	rm */*.[oa]
