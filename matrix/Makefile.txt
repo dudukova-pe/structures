@@ -1,0 +1,9 @@
+all:
+	gcc -c ./entering/entering.c -o ./entering/entering.o
+	ar r ./entering/libentering.a ./entering/entering.o
+	gcc -c ./lines/lines.c -o ./lines/lines.o -L ./entering/ -l:libentering.a -g
+	ar r ./lines/liblines.a ./lines/lines.o
+	gcc -c ./matrix/matrix.c -o ./matrix/matrix.o -L ./entering/ -l:libentering.a -L ./lines/ -l:liblines.a -g
+	ar r ./matrix/libmatrix.a ./lines/lines.o ./matrix/matrix.o
+	gcc main.c -o check -L ./entering/ -l:libentering.a -L ./lines -l:liblines.a -L ./matrix/ -l:libmatrix.a -g
+	rm ./*/*.[oa]
