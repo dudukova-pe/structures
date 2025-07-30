@@ -1,0 +1,23 @@
+all:
+        $(MAKE) entering
+        $(MAKE) scapegoat_tree
+        $(MAKE) communication
+        gcc main.c -o check -L scapegoat_tree -l:libscapegoat_tree.a -L entering -l:libentering.a -L communication -l:libcommunication.a -lreadline -g
+        $(MAKE) clean
+entering: entering/entering.o
+        gcc -c entering/entering.c -o entering/entering.o -g
+        ar r entering/libentering.a entering/entering.o
+scapegoat_tree: scapegoat_tree/scapegoat_tree.o
+        gcc -c scapegoat_tree/functions.c -o scapegoat_tree/functions.o -g
+        gcc -c scapegoat_tree/scapegoat_tree.c -o scapegoat_tree/scapegoat_tree.o -g
+        ar r scapegoat_tree/libscapegoat_tree.a scapegoat_tree/scapegoat_tree.o scapegoat_tree/functions.o 
+#       gcc -c scapegoat_tree/functions.c -o scapegoat_tree/functions.o -g
+#       gcc -c scapegoat_tree/scapegoat_tree.c -o scapegoat_tree/scapegoat_tree.o -g
+#       ar r scapegoat_tree/libscapegoat_tree.a scapegoat_tree/functions.o scapegoat_tree/scapegoat_tree.o
+communication: communication/communication.o
+        gcc -c communication/communication.c -o communication/communication.o -L scapegoat_tree -l:libscapegoat_tree.a -L entering -l:libentering.a -g
+        ar r communication/libcommunication.a communication/communication.o scapegoat_tree/scapegoat_tree.o scapegoat_tree/functions.o
+#       gcc -c communication/communication.c -o communication/communication.o -L entering/ -l:libentering.a -L scapegoat_tree/ -l:libscapegoat_tree.a -g
+#       ar r communication/libcommunication.a entering/entering.o communication/communication.o
+clean:
+        rm */*.[oa]
