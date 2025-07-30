@@ -1,0 +1,20 @@
+all:
+	gcc -c ./entering/entering.c -o ./entering/entering.o -g
+	ar r ./entering/libentering.a ./entering/entering.o
+	gcc -c ./tree/tree.c -o ./tree/tree.o -g
+	gcc -c ./tree/functions.c -o ./tree/functions.o -g
+	ar r ./tree/libtree.a ./tree/tree.o ./tree/functions.o
+	gcc -c ./communication/communication.c -o ./communication/communication.o -L ./entering/ -l:libentering.a -g
+	ar r ./communication/libcommunication.a ./communication/communication.o
+	gcc main.c -o check -L ./tree/ -l:libtree.a -L ./communication/ -l:libcommunication.a -L ./entering/ -l:libentering.a -lreadline -g
+entering:
+	gcc -c ./entering/entering.c -o ./entering/entering.o -g
+	ar r ./entering/libentering.a ./entering/entering.o
+tree:
+	gcc -c ./tree/tree.c -o ./tree/tree.o -g
+	gcc -c ./tree/functions.c -o ./tree/functions.o -g
+communication:
+	gcc -c ./communication/communication.c -o ./communication/communication.o -L ./entering/ -l:libentering.a -g
+	ar r ./communication/libcommunication.a ./communication/communication.o
+clean:
+	rm ./*/*.[oa]
