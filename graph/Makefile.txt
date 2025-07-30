@@ -1,0 +1,26 @@
+all:
+        $(MAKE) entering
+        $(MAKE) queue
+        $(MAKE) matr
+        $(MAKE) graph
+        $(MAKE) communication
+        gcc main.c -o check -L graph -l:libgraph.a -L entering -l:libentering.a -L communication -l:libcommunication.a -L matr -l:libmatr.a -L queue -l:libqueue.a -L entering -l:libentering.a -lreadline -g
+        $(MAKE) clean
+entering: entering/entering.o
+        gcc -c entering/entering.c -o entering/entering.o -g
+        ar r entering/libentering.a entering/entering.o
+queue: queue/queue.o
+        gcc -c queue/queue.c -o queue/queue.o -g
+        ar r queue/libqueue.a queue/queue.o
+matr: matr/matr.o
+        gcc -c matr/matr.c -o matr/matr.o -g
+        ar r matr/libmatr.a matr/matr.o
+graph: graph/graph.o
+        gcc -c graph/functions.c -o graph/functions.o -g
+        gcc -c graph/graph.c -o graph/graph.o -L queue/ -l:libqueue.a -L matr -l:libmatr.a -g
+        ar r graph/libgraph.a graph/graph.o graph/functions.o queue/queue.o matr/matr.o
+communication: communication/communication.o
+        gcc -c communication/communication.c -o communication/communication.o -L graph -l:libgraph.a -L entering -l:libentering.a -g
+        ar r communication/libcommunication.a communication/communication.o graph/graph.o graph/functions.o entering/entering.o
+clean:
+        rm */*.[oa]

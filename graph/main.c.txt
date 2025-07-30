@@ -1,0 +1,39 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "./entering/entering.h"
+#include "./graph/graph.h"
+#include "./communication/communication.h"
+
+void print_menu(const char* msgs[], const int count_msgs) {
+        printf("\nВыберите действие:\n");
+        for (int i = 0; i < count_msgs; i++) {
+                printf("%s\n", msgs[i]);
+        }
+}
+
+int main() {
+        Graph* graph = create_graph();
+        const char *msgs[] = {"0: Завершить работу", "1: Добавить новую вершину", "2: Добавить новое ребро", "3: Изменить тип вершины", "4: Удалить вершину", "5: Удалить ребро", "6: Проверка достижимости хотя бы одного из выходов из указанной точки входа", "7: Поиск кратчайшего пути между указанным входом и указанным выходом", "8: Определение ближайшего к указанному входу выхода и определение расстояния до него", "9: Печать графа", "10: Использовать образец графа"};
+        const int count_msgs = sizeof(msgs) / sizeof(msgs[0]);
+        print_menu(msgs, count_msgs);
+        int (*func[])(Graph*) = {NULL, insert_vertex, insert_edge, change_type, remove_vertex, remove_edge, checking_reachability, find_shortest_way, find_nearest_exit, print_graph_with_change, make_graph_example};
+        int menu = -1;
+        int check = inputint(&menu, 0, 10);
+        while (check != EOF) {
+                if (menu == 0) {
+                        break;
+                }
+                check = func[menu](graph);
+                if (check == EOF) {
+                        delete_graph(graph);
+                        return EOF;
+                }
+                if (menu != 9) {
+                        print_graph(graph);
+                }
+                print_menu(msgs, count_msgs);
+                check = inputint(&menu, 0, 10);
+        }
+        delete_graph(graph);
+        return 0;
+}
